@@ -12,7 +12,7 @@
 <div>
     <p><a href="cursos.php">CURSOS</a></p>
     <p><a href="alumnos.php">ALUMNOS</a></p>
-    <p><a href="NOTAS.php">NOTAS</a></p>
+    <p><a href="notas.php">NOTAS</a></p>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

@@ -23,7 +23,7 @@ $query = "select * from alumnos";
 $resul = mysqli_query($db, $query);
 
 $num = mysqli_num_rows($resul);
-echo "<table class='table-condensed'; style='text-align: center;'> ";
+echo "<table class='table'> ";
     echo "<tr>";
         echo "<th>CODIGO ALUMNO</th>";
         echo "<th>CURSO</th>";
@@ -41,7 +41,7 @@ echo "<table class='table-condensed'; style='text-align: center;'> ";
         echo "<td>$fila[2]</td>";
         echo "<td>$fila[3]</td>";
         echo "<td>$fila[4]</td>";
-        echo "<td><button type='submit' name='modificar' value='modificar'>Modificar</button> </td>";
+        echo "<td><button type='submit' name='modificar' value='$fila[0]'>Modificar</button> </td>";
         echo "<td><button type='submit' name='borrar' value='$fila[0]'>Borrar</button> </td>";
         echo "</tr>";
 
@@ -53,6 +53,10 @@ echo "<table class='table-condensed'; style='text-align: center;'> ";
     }
 
     if (isset($_POST['modificar'])){
+        $cod_alu = $_POST['modificar'];
+        $query = 'SELECT * FROM ALUMNOS WHERE COD_ALU = $cod_alu';
+        $resul = mysqli_query($db, $query);
+
         $ca=$_SESSION['ca'];
         $cc=$_SESSION['cc'];
         $dni=$_SESSION['dni'];
@@ -66,7 +70,6 @@ echo "<table class='table-condensed'; style='text-align: center;'> ";
         echo "<label for=\"NOMBRE\">NOMBRE: <input type='text' name='nom' value='$nom'></label>";
         echo "<button type='submit' name='guarda'>Guardar</button>";
         echo "</panel>";
-
     }
     if(isset($_POST['borrar'])){
 
@@ -118,28 +121,10 @@ if (isset($_POST['guarda'])){
         $apellido = $_POST['apellido'];
         $nm = $_POST['nm'];
 
-        $n1 = 0;
-        $n2 = 0;
-        $n3 = 0;
-        $med = 0;
-
         $query = "INSERT INTO ALUMNOS VALUES (?,?,?,?,?)";
         $stmt = $db->prepare($query);
         $stmt->bind_param('sssss', $ca, $cc, $dni, $apellido, $nm);    // Enlazamos 4 parámetros
         $stmt->execute();
-        $query2 = "INSERT INTO NOTAS VALUES (?,?,?,?,?,?)";
-        $stmt=$db->prepare($query2);
-        $stmt->bind_param('ssdddd', $ca, $cc, $n1, $n2, $n3, $med);
-        $stmt->execute();
-
- /*MODIFICAR CODIGO PARA AÑADIR NOTAS AUTOMATICAMENTE Y ESTABLECERLAS A 0*/
-        if ($stmt->affected_rows > 0)   // Número de filas insertadas
-        {
-            echo  "<p>Se ha añadido correctamente el Alumno.</p>";
-        } else
-        {
-            echo "<p>No se ha podido añadir el Alumno.</p>";
-        }
     }
 
 echo "</table>";
