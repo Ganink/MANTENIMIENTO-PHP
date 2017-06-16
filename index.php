@@ -8,11 +8,11 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<h1>MANTENIMIENTO DE CURSOS</h1>
+<h1 style="text-align: center; font-size: 400%; text-decoration: underline;">MANTENIMIENTO DE CURSOS</h1>
 <div>
-    <p><a href="cursos.php">CURSOS</a></p>
-    <p><a href="alumnos.php">ALUMNOS</a></p>
-    <p><a href="notas.php">NOTAS</a></p>
+    <p style="text-align: center; font-size: 320%;"><a href="cursos.php">CURSOS</a></p>
+    <p style="text-align: center; font-size: 320%;"><a href="alumnos.php">ALUMNOS</a></p>
+    <p style="text-align: center; font-size: 320%;"><a href="notas.php">NOTAS</a></p>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

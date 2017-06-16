@@ -10,6 +10,28 @@
 <body>
 <h1 style="text-align: center;">MANTENIMIENTO DE ALUMNOS</h1>
 <form action="alumnos.php" method="post">
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Administración de Alumnos</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="index.php"><span class="glyphicon glyphicon-home"></span> Inicio</a></li>
+                    <li><a href="Cursos.php">Cursos</a></li>
+                    <li><a href="Alumnos.php">Alumnos</a></li>
+                    <li><a href="Notas.php">Notas</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <?php
 $db = mysqli_connect("localhost","root","","ocupacional2");
 
@@ -80,7 +102,11 @@ echo "<table class='table'> ";
         $stmt->bind_param('s', $ca);
         $stmt->execute();
 
-        echo "Alumno borrado correctamente";
+        $stmt = $db->prepare("delete from notas where COD_ALU=?");
+        $stmt->bind_param('s', $ca);
+        $stmt->execute();
+
+        echo "<script>alert('Se ha borrado el alumno y sus notas correctamente.')</script>";
     }
 
     if (isset($_POST['nuevo'])){
@@ -94,23 +120,19 @@ echo "<table class='table'> ";
         echo "</panel>";
     }
 
-if (isset($_POST['guarda'])){
+    if (isset($_POST['guarda'])){
     $dni = $_POST['dni'];
     $apellido = $_POST['apellido'];
     $nom = $_POST['nom'];
+    $ca = $_SESSION['ca'];
 
 
-    $query = "UPDATE ALUMNOS SET COD_CUR = ? WHERE COD_CUR = ?";
-    $stmt = $db->prepare($query);
-    $stmt->bind_param('sss', $cod_cur, $dni, $apellido, $nom);    // Enlazamos 4 parámetros
-    $stmt->execute();
-
-    if ($stmt->affected_rows > 0)   // Número de filas insertadas
-    {
-        echo  "<p>Se ha añadido correctamente el Alumno.</p>";
-    } else
-    {
-        echo "<p>No se ha podido añadir el Alumno.</p>";
+    $sql = "update alumnos set dni= '%s', apellidos= '%s', nombre= '%s' where cod_alu = '%s'";
+    $query = sprintf($sql, $dni, $apellido, $nom, $ca);
+    $resultado = $db->query($query);
+    if (!$resultado){
+        echo "<script>alert('Se ha producido un error.')</script>";
+        return(false);
     }
 }
 
@@ -125,6 +147,27 @@ if (isset($_POST['guarda'])){
         $stmt = $db->prepare($query);
         $stmt->bind_param('sssss', $ca, $cc, $dni, $apellido, $nm);    // Enlazamos 4 parámetros
         $stmt->execute();
+
+        if ($stmt->affected_rows > 0)   // Número de filas insertadas
+        {
+            $n1 = 0;
+            $n2 = 0;
+            $n3 = 0;
+            $media = 0;
+
+            $query = "insert into notas VALUES (?, ?, ?, ?, ?, ?)";
+            $stmt = $db->prepare($query);
+            $stmt->bind_param('ssdddd', $cc, $ca, $n1, $n2, $n3, $media);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0){
+                echo "<script>alert('Se ha creado el alumno y sus notas correctamente.')</script>";
+            }else{
+                echo "<script>alert('Se ha producido un error.')</script>";
+            }
+        } else
+        {
+            echo "<script>alert('Se ha producido un error.')</script>";
+        }
     }
 
 echo "</table>";
